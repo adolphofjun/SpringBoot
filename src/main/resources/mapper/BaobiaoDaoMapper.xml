@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.adolph.demo.dao.BaobiaoDao" >
+
+
+
+
+    <select id="getAllList" parameterType="map" resultType="map">
+select
+	t.name as wareName,
+	t.wareCode,
+	t.unitName,
+	t.model as wareModel,
+	t.iden,
+	t.detIden,
+	t.line_id,
+	bd.co_iden,
+	bd.code as bdCode,
+	c.name as clientName,
+	--CONVERT(varchar(100),bdd. d_date, 23) as orderDate,
+	t.model as wareModel,
+	t.code as orderCode,
+	--t.order_date as orderDate,
+	CONVERT(varchar(100),t.check_date, 23) as pgDate,
+	--t.trade_date as tradeDate,
+	CONVERT(varchar(100),t.begin_date, 23) as beginDate,
+	CONVERT(varchar(100),bd.trade_date, 23) as xdDate,
+	CONVERT(varchar(100),t.end_date, 23) as endDate,
+	t.order_code as orderCode,
+    --bdd.s_other1 as clientCode,
+    t.gx_name as gxName,
+    t.work_man as gzMan,
+    e.name as gzManName,
+    t.quantity,
+    t.quantity_make,
+    CONVERT(varchar(100),(select MAX(work_mo_det_real.work_date) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=t.iden and work_mo_det_real.mo_line_id=t.line_id and isbegin=0  ), 23)
+     as real_end_data,
+    (select max(work_mo_det_real.s_other1) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=t.iden and work_mo_det_real.mo_line_id=t.line_id and isbad=0 and isbegin=0   ) as real_s_other1,
+    (select max(work_mo_det_real.s_other2) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=t.iden and work_mo_det_real.mo_line_id=t.line_id and isbad=0 and isbegin=0   ) as real_s_other2,
+        case
+        when (select MAX(work_mo_det_real.work_date) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=t.iden and work_mo_det_real.mo_line_id=t.line_id and isbegin=0  ) is null and CONVERT(varchar(100),t.begin_date, 23) &gt;= CONVERT(varchar(100),getdate(), 23) then 2
+        when (select MAX(work_mo_det_real.work_date) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=t.iden and work_mo_det_real.mo_line_id=t.line_id and isbegin=0  ) is null and CONVERT(varchar(100),t.begin_date, 23) &lt; CONVERT(varchar(100),getdate(), 23) then 0
+        when (select MAX(work_mo_det_real.work_date) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=t.iden and work_mo_det_real.mo_line_id=t.line_id and isbegin=0  ) is not null and CONVERT(varchar(100),t.begin_date, 23) &gt;= CONVERT(varchar(100),(select MAX(work_mo_det_real.work_date) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=t.iden and work_mo_det_real.mo_line_id=t.line_id and isbegin=0  ), 23) then 1
+        when (select MAX(work_mo_det_real.work_date) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=t.iden and work_mo_det_real.mo_line_id=t.line_id and isbegin=0  ) is not null and CONVERT(varchar(100),t.begin_date, 23) &lt; CONVERT(varchar(100),(select MAX(work_mo_det_real.work_date) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=t.iden and work_mo_det_real.mo_line_id=t.line_id and isbegin=0  ), 23) then 0
+        else 0 end as yq
+ from temp_adolph t
+ left join buyorder bd on bd.code =  t.order_code
+ --left join buyorder_det bdd on bd.iden = bdd.iden
+ left join emp e on e.iden = t.work_man
+ left join client c on c.iden = bd.co_iden
+ where t.check_date >= '2018-06-20 22:20:02.757'
+  </select>
+
+    <select id="deleteTemp">
+      if object_id('temp_adolph') is not null Begin
+        drop table temp_adolph
+      End
+    </select>
+    <select id="createTemp">
+SELECT * into temp_adolph from
+ (
+SELECT  ware.name ,
+           ware.price ,
+           ware.bom_iden ,
+           work_mo.iden ,
+           work_mo.code ,
+           work_mo.order_man ,
+           work_mo.order_date ,
+           work_mo.check_man ,
+           work_mo.check_date ,
+           work_mo.bm_iden ,
+           work_mo.memo ,
+           work_mo.kind ,
+           work_mo.state ,
+           work_mo.vouche_man ,
+           work_mo.vouche_date ,
+           work_mo.trade_man ,
+           work_mo.trade_date ,
+           work_mo_det.ware_iden ,
+           work_mo_det.iden detIden,
+           work_mo_det.quantity ,
+           work_mo_det.line_id ,
+           ware.code as wareCode,
+           work_mo_det.begin_date ,
+           work_mo_det.isfinish ,
+           work_mo_det.plan_iden ,
+           work_mo_det.end_date ,
+           work_mo_det.memo as detMemo ,
+           work_mo_det.bom_mrp_iden ,
+           work_mo_det.kind as  detKind ,
+           work_mo_det.plan_ware_iden ,
+           work_mo_det.work_man ,
+           work_mo_det.bm_iden  as detbm_iden,
+           ware.ware_gx ,
+           ware.unit ,
+           u.name as unitName,
+           ware.model ,
+           ware.size ,
+ware.color,
+ware.s_temp1,
+
+           work_mo_det.plan_line_id ,
+           work_mo_det.use_time ,
+           work_mo_det.gx_iden ,
+           i.name as gx_name,
+           work_mo_det.priority ,
+           work_mo_det.next_gx_iden ,
+           work_mo_det.sn ,
+           work_mo_det.sn2 ,
+           work_mo_det.sn3 ,
+           work_mo_det.sn4 ,
+           work_mo_det.next_bm_iden ,
+           work_mo_det.jjcd ,
+           work_mo_det.next_work_man ,
+           work_mo_det.ware_set ,
+           work_mo_det.fix_iden ,
+           work_mo_det.process_tag ,
+
+           isnull((select sum(work_mo_det_real.quantity)
+        from work_mo_det_real,buy_plan_main
+        where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and  work_mo_det_real.mo_iden=work_mo_det.iden and work_mo_det_real.mo_line_id=work_mo_det.line_id and work_mo_det_real.isbad=0 and work_mo_det_real.isbegin=0  and work_mo_det_real.kind=work_mo_det.kind ),0) as quantity_out,
+           isnull((select sum(work_mo_det_real.quantity)
+        from work_mo_det_real,buy_plan_main
+        where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and  work_mo_det_real.mo_iden=work_mo_det.iden and work_mo_det_real.mo_line_id=work_mo_det.line_id and work_mo_det_real.isbad=0 and work_mo_det_real.isbegin=0  ),0) as quantity_make,
+           isnull((select sum(work_mo_det_real.quantity) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=work_mo_det.iden and work_mo_det_real.mo_line_id=work_mo_det.line_id and work_mo_det_real.isbad=1 and work_mo_det_real.isbegin=0  ),0) as quantity_bad,
+           (select sum(work_mo_det_real.quantity) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=work_mo_det.iden and work_mo_det_real.mo_line_id=work_mo_det.line_id  and work_mo_det_real.isbegin=1 ) as quantity_input,
+           0 as isselected,
+           (select sum(work_mo_det_real.date_num) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=work_mo_det.iden and work_mo_det_real.mo_line_id=work_mo_det.line_id and isbegin=0   ) as real_use_time,
+           (select ware.code+ware.name from plan_det,
+ware where plan_det.ware_iden=ware.iden and plan_det.iden=work_mo_det.plan_iden and plan_det.line_id=work_mo_det.plan_line_id) as plan_ware_name ,
+           (select client.name from plan_det,buyorder,client where plan_det.order_iden=buyorder.iden and buyorder.co_iden=client.iden and plan_det.iden=work_mo_det.plan_iden and plan_det.line_id=work_mo_det.plan_line_id) as client_name,
+           (select buyorder.code from plan_det,buyorder where plan_det.order_iden=buyorder.iden  and plan_det.iden=work_mo_det.plan_iden and plan_det.line_id=work_mo_det.plan_line_id) as order_code,
+           (select plan_main.code from plan_det,plan_main where plan_main.iden=plan_det.iden and  plan_det.iden=work_mo_det.plan_iden and plan_det.line_id=work_mo_det.plan_line_id) as plan_code,
+           (select plan_det.sn from plan_det,plan_main where plan_main.iden=plan_det.iden and  plan_det.iden=work_mo_det.plan_iden and plan_det.line_id=work_mo_det.plan_line_id) as plan_sn,
+           (select min(work_mo_det_real.work_date) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=work_mo_det.iden and work_mo_det_real.mo_line_id=work_mo_det.line_id and isbegin=1   ) as real_input_date,
+           (select max(work_mo_det_real.work_date) from work_mo_det_real,buy_plan_main where work_mo_det_real.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and work_mo_det_real.mo_iden=work_mo_det.iden and work_mo_det_real.mo_line_id=work_mo_det.line_id and isbad=0 and isbegin=0   ) as real_output_date,
+           (select sum(buy_plan.rq_quantity) from buy_plan,buy_plan_main where buy_plan.main_iden=buy_plan_main.iden and buy_plan_main.check_man is not null and buy_plan.trade_iden=work_mo_det.iden and buy_plan.trade_line_id=work_mo_det.line_id and buy_plan_main.kind=61   ) as quantity_zhiliang
+    FROM ware ,
+           work_mo ,
+           work_mo_det
+           left join info i on i.line_id = work_mo_det.gx_iden and i.iden = 20
+            left join info u on u.line_id = work_mo_det.gx_iden and u.iden = 1
+           WHERE ( work_mo.iden = work_mo_det.iden ) and          ( work_mo_det.ware_iden = ware.iden ) and          ( ( 1 = 1 ) )
+           ) t
+    </select>
+</mapper>
