@@ -2,7 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.adolph.demo.dao.BaobiaoDao" >
 
-
+    <insert id="saveDate" parameterType="map">
+        insert into pluten_date (baobiaoId,daoliaoDate)
+        values(#{baobiaoId},#{daoliaoDate});
+    </insert>
 
 
     <select id="getAllList" parameterType="map" resultType="map">
@@ -14,12 +17,14 @@ select
 	t.iden,
 	t.detIden,
 	t.line_id,
+	t.orderSn,
 	bd.co_iden,
 	bd.code as bdCode,
 	c.name as clientName,
-	--CONVERT(varchar(100),bdd. d_date, 23) as orderDate,
+	CONVERT(varchar(100),t.orderDate, 23) as orderDate,
 	t.model as wareModel,
 	t.code as orderCode,
+	CONVERT(varchar(100),p.daoliaoDate, 23) as daoliaoDate,
 	--t.order_date as orderDate,
 	CONVERT(varchar(100),t.check_date, 23) as pgDate,
 	--t.trade_date as tradeDate,
@@ -48,6 +53,7 @@ select
  --left join buyorder_det bdd on bd.iden = bdd.iden
  left join emp e on e.iden = t.work_man
  left join client c on c.iden = bd.co_iden
+ left join pluten_date p on p.baobiaoId =  t.iden
  where t.check_date >= '2018-06-20 22:20:02.757'
   </select>
 
@@ -59,6 +65,9 @@ select
     <select id="createTemp">
 SELECT * into temp_adolph from
  (
+select t.* ,bd.d_date as orderDate,BD.s_other1,bd.s_other2,bd.sn as orderSn
+from
+(
 SELECT  ware.name ,
            ware.price ,
            ware.bom_iden ,
@@ -141,6 +150,9 @@ ware where plan_det.ware_iden=ware.iden and plan_det.iden=work_mo_det.plan_iden 
            left join info i on i.line_id = work_mo_det.gx_iden and i.iden = 20
             left join info u on u.line_id = work_mo_det.gx_iden and u.iden = 1
            WHERE ( work_mo.iden = work_mo_det.iden ) and          ( work_mo_det.ware_iden = ware.iden ) and          ( ( 1 = 1 ) )
+
+) t left join plan_det pd on pd.line_id = t.plan_line_id and pd.iden = t.plan_iden
+left join buyorder_det bd on bd.line_id = pd.order_line_id and bd.iden = pd.order_iden
            ) t
     </select>
 </mapper>

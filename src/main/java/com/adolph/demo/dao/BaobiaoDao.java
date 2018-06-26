@@ -11,4 +11,5 @@ public interface BaobiaoDao {
     List<Map> getAllList(Map map);
     void createTemp();
     void deleteTemp();
+    void saveDate(Map map);
 }

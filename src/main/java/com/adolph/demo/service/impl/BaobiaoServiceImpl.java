@@ -22,6 +22,19 @@ public class BaobiaoServiceImpl implements BaobiaoService {
         baobiaoDao.createTemp();
         List<Map> mapList = baobiaoDao.getAllList(null);
         Map data = new HashMap();
+        data = getDataUtil(mapList);
+        baobiaoDao.deleteTemp();
+        System.out.println("===="+data.toString());
+        return data;
+    }
+
+    @Override
+    public void saveDate(Map map) {
+        baobiaoDao.saveDate(map);
+    }
+
+    private Map getDataUtil(List<Map> mapList) {
+        Map data = new HashMap();
         for(int i=0; i<mapList.size(); i++){
             Map temp = mapList.get(i);
             int iden = (int) temp.get("detIden");
@@ -88,10 +101,8 @@ public class BaobiaoServiceImpl implements BaobiaoService {
                 data.put(""+iden,temp);
             }
         }
-
-
-        baobiaoDao.deleteTemp();
-        System.out.println("===="+data.toString());
-        return data;
+        return  data;
     }
+
+
 }

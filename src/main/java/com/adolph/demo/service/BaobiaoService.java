@@ -6,4 +6,5 @@ import java.util.Map;
 public interface BaobiaoService {
 
     public Map findAll(Map map);
+    void saveDate(Map map);
 }
