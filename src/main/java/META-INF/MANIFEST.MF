@@ -1,0 +1,40 @@
+Manifest-Version: 1.0
+Class-Path: lang-tag-1.4.jar springfox-core-2.4.0.jar bcprov-jdk15on-1
+ .51.jar jcip-annotations-1.0.jar springfox-spring-web-2.4.0.jar javax
+ .annotation-api-1.3.2.jar tomcat-embed-el-8.5.31.jar slf4j-api-1.7.25
+ .jar spring-expression-5.0.7.RELEASE.jar classmate-1.3.4.jar httpclie
+ nt-4.5.5.jar springfox-swagger-common-2.4.0.jar jackson-core-asl-1.9.
+ 2.jar jul-to-slf4j-1.7.25.jar adal4j-1.0.0.jar guava-18.0.jar log4j-t
+ o-slf4j-2.10.0.jar mssql-jdbc-6.1.0.jre8.jar springfox-swagger-ui-2.4
+ .0.jar fastjson-1.2.41.jar jersey-client-1.13.jar springfox-spi-2.4.0
+ .jar spring-boot-starter-jdbc-2.0.3.RELEASE.jar jackson-module-parame
+ ter-names-2.9.6.jar mybatis-generator-core-1.3.5.jar activation-1.1.j
+ ar mybatis-spring-boot-autoconfigure-1.3.1.jar mybatis-3.4.5.jar jack
+ son-datatype-jsr310-2.9.6.jar poi-3.17.jar commons-lang-2.6.jar jerse
+ y-json-1.13.jar spring-web-5.0.7.RELEASE.jar spring-boot-starter-web-
+ 2.0.3.RELEASE.jar jackson-core-2.9.6.jar HikariCP-2.7.9.jar jackson-d
+ atatype-jdk8-2.9.6.jar mybatis-spring-1.3.1.jar jackson-jaxrs-1.9.2.j
+ ar stax-api-1.0.1.jar mail-1.4.5.jar azure-core-0.9.3.jar swagger-ann
+ otations-1.5.6.jar snakeyaml-1.19.jar jackson-xc-1.9.2.jar jettison-1
+ .1.jar spring-webmvc-5.0.7.RELEASE.jar jaxb-impl-2.2.3-1.jar mybatis-
+ spring-boot-starter-1.3.1.jar jackson-annotations-2.9.0.jar commons-c
+ odec-1.11.jar spring-tx-5.0.7.RELEASE.jar spring-boot-starter-json-2.
+ 0.3.RELEASE.jar accessors-smart-1.2.jar spring-boot-starter-logging-2
+ .0.3.RELEASE.jar oauth2-oidc-sdk-4.5.jar spring-boot-2.0.3.RELEASE.ja
+ r logback-classic-1.2.3.jar tomcat-embed-websocket-8.5.31.jar javax.i
+ nject-1.jar mysql-connector-java-8.0.8-dmr.jar gson-2.8.5.jar spring-
+ plugin-metadata-1.2.0.RELEASE.jar httpcore-4.4.9.jar spring-jdbc-5.0.
+ 7.RELEASE.jar validation-api-2.0.1.Final.jar jackson-mapper-asl-1.9.2
+ .jar commons-collections4-4.1.jar springfox-swagger2-2.4.0.jar jaxb-a
+ pi-2.3.0.jar asm-5.0.4.jar jersey-core-1.13.jar swagger-models-1.5.6.
+ jar spring-boot-starter-2.0.3.RELEASE.jar hibernate-validator-6.0.10.
+ Final.jar nimbus-jose-jwt-3.1.2.jar springfox-schema-2.4.0.jar tomcat
+ -embed-core-8.5.31.jar spring-aop-5.0.7.RELEASE.jar spring-beans-5.0.
+ 7.RELEASE.jar spring-context-5.0.7.RELEASE.jar spring-boot-starter-to
+ mcat-2.0.3.RELEASE.jar spring-jcl-5.0.7.RELEASE.jar commons-lang3-3.7
+ .jar spring-boot-autoconfigure-2.0.3.RELEASE.jar json-smart-2.3.jar a
+ zure-keyvault-0.9.3.jar jackson-databind-2.9.6.jar jboss-logging-3.3.
+ 2.Final.jar log4j-api-2.10.0.jar spring-core-5.0.7.RELEASE.jar spring
+ -plugin-core-1.2.0.RELEASE.jar logback-core-1.2.3.jar
+Main-Class: com.adolph.demo.DemoApplication
+
